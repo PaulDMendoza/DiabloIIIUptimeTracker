@@ -1,0 +1,120 @@
+﻿body 
+{
+    font-family: sans-serif;
+   background-color: #000;
+   
+}
+
+a 
+{
+   color: #8CC63F;
+   text-decoration: underline;
+   font-weight: bold;
+   cursor: pointer;
+      
+}
+
+header 
+{
+    width: 800px;
+    margin: auto;   
+}
+
+nav 
+{
+ display: none;   
+}
+
+#main 
+{
+    width: 800px;
+    margin: auto; 
+    background-color: #E8E8E7;
+    -moz-border-radius: 15px;
+    border-radius: 15px;
+    color: black;    
+    padding-left: 25px;  
+    padding-top: 20px;
+    padding-bottom: 20px; 
+}
+
+#Home-Index .header-description p
+{
+    width: 80%;
+    font-size: 15px;
+    margin-left: 45px;
+    text-align: justify;
+}
+
+#Home-Index #server-list 
+{
+    width: 100%;
+}
+
+#Home-Index .region h1 
+{
+    margin-bottom: 0px;       
+}
+
+#Home-Index .region .serverType 
+{
+    margin-bottom: 15px;       
+}
+
+#Home-Index .serverType .title
+{
+    font-weight: bold;       
+}
+
+#Home-Index .region .serverType .status
+{
+        
+}
+
+#Home-Index #last-updated 
+{
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    background-color: #8CC63F;
+    color: white;
+    padding: 6px 5px 5px 6px;
+    -webkit-border-top-left-radius: 8px;
+    -moz-border-radius-topleft: 8px;
+    border-top-left-radius: 8px;
+}
+
+#Home-Index .serverType-ExpandedDetails
+{
+    display: none;   
+}
+
+#Home-Index .serverType-ExpandedDetails .content
+{
+    text-align: center;
+}
+
+#Home-Index .serverType-ExpandedDetails .content h2
+{
+    text-align: center;
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+#Home-Index .serverType-ExpandedDetails .content h3
+{
+    text-align: center;
+    font-size: 15px;
+    margin: 0px 0px 0px 0px;
+}
+
+#Home-Index .serverType-ExpandedDetails .content .chart
+{
+    width: 500px;
+    height: 250px;
+    margin: auto;
+}
+
+
+
+

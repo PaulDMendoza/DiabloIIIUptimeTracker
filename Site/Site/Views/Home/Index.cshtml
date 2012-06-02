@@ -1,0 +1,77 @@
+﻿@model Site.Models.Home.IndexViewModel
+@{
+    ViewBag.Title = "Diablo III Server Status";
+}
+<div id="Home-Index">
+    <div class="header-description">
+        <h1>
+            What is Diablo III Downtime?</h1>
+        <p>
+            Diablo 3 is the first of the Diablo franchise to require an internet connection
+            to play. With frequent server restarts, patches and other downtime causes, this
+            site will help you monitor whether you are able to play Diablo 3 and track when
+            you’re most likely unable to play.
+        </p>
+    </div>
+    <table id="server-list">
+        @foreach (var cg in Model.JsonModel.CategoryViewModels.GroupBy(c => c.Region))
+        {
+            <tr>
+                <td class="region">
+                    <h1>@cg.First().Region</h1>
+                </td>
+            </tr>
+            foreach (var c in cg)
+            {
+            <tr class="serverType" data-region="@cg.First().Region" data-serverCategory="@c.ServerCategory">
+                <td class="title">@c.ServerCategory
+                </td>
+                <td class="status">
+                    @if (c.MostRecentRead.Status == UptimeData.PollStatusType.Up)
+                    {
+                        <img src="/Content/images/UpArrow.png" />
+                    }
+                    else
+                    {
+                        <img src="/Content/images/DownArrow.png" />
+                    }
+                </td>
+                <td class="sinceLastDowntime">@c.StatusMessage
+                </td>
+                <td class="expand-details">
+                    <a>Chart This</a>
+                </td>
+            </tr>
+            <tr class="serverType-ExpandedDetails">
+                <td colspan="4">
+                    <div class="content">
+                        <h2>
+                            Last 24 Hours</h2>
+                        <h3>
+                            Hourly percentage of uptime</h3>
+                        <div class="24HourChart chart">
+                        </div>
+                        <h2>
+                            Last 30 Days</h2>
+                        <h3>
+                            Daily percentage of uptime</h3>
+                        <div class="30DaysChart chart">
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            }
+        }
+    </table>
+    <div id="last-updated">
+        Last updated at <span>@DateTime.Now.ToLongTimeString()</span>
+    </div>
+</div>
+<script type="text/javascript">
+    window.pageModel = @Html.Raw(Json.Encode(Model.JsonModel))
+
+</script>
+<script src="/Scripts/ThirdParty/flotr2/flotr2.min.js" type="text/javascript"></script>
+<script src="/Scripts/Home/DataHandler.js" type="text/javascript"></script>
+<script src="/Scripts/Home/ServerView.js" type="text/javascript"></script>
+<script src="/Scripts/Home/Index.js" type="text/javascript"></script>
