@@ -1,6 +1,6 @@
 This is a site that monitors the status of Diablo 3 servers and how often they are up or down. This site is running at http://www.diablo3downtime.com. 
 
-This is built using ASP.NET MVC 3 and a Windows service for the polling of the site. 
+This is built using ASP.NET MVC 3 and a Windows service for the polling of the site. The visualization is all done using Flotr2 JavaScript libary. This only supports browsers like IE9, Firefox and Chrome.
 
 Copyright (C) 2012 Paul Mendoza
 
