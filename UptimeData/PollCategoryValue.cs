@@ -12,6 +12,6 @@ namespace UptimeData
 
         public int PollCategoryValueID { get; set; }
 
-        public DateTime CreatedTime { get; set; }
+        public DateTimeOffset CreatedTime { get; set; }
     }
 }

@@ -23,8 +23,9 @@ namespace Site.Models.Home
 
                 SetStatusMessage(readingGroup, categoryViewModel);
 
-                categoryViewModel.UptimeLast24Hours = readingGroup
-                    .Where(r => r.CreatedTime >= DateTime.Now.AddDays(-1))
+                var reads = readingGroup.ToList();
+                categoryViewModel.UptimeLast24Hours = reads
+                    .Where(r => r.CreatedTime >= DateTimeOffset.Now.AddDays(-1))
                     .GroupBy(p => p.CreatedTime.ToString("MM/dd/yyyy HH"))
                     .Select(pollValuesInHour =>
                     {
@@ -37,8 +38,9 @@ namespace Site.Models.Home
                     })
                     .ToList();
 
-                categoryViewModel.Uptime30Days = readingGroup
-                    .Where(r => r.CreatedTime >= DateTime.Now.AddDays(-31))
+                DateTimeOffset date30DaysAgo = DateTimeOffset.Now.AddDays(-31);
+                categoryViewModel.Uptime30Days = reads
+                    .Where(r => r.CreatedTime >= date30DaysAgo)
                     .GroupBy(p => p.CreatedTime.ToString("MM/dd/yyyy"))
                     .Select(pollValuesInDay =>
                     {
@@ -46,7 +48,7 @@ namespace Site.Models.Home
                         return new UptimeInTimespan()
                         {
                             P = (decimal)pollValuesInDay.Count(v => v.Status == PollStatusType.Up) / pollValuesInDay.Count(),
-                            T = singleTime.Date.AddHours(singleTime.Hour)
+                            T = singleTime.Date
                         };
                     })
                     .ToList();

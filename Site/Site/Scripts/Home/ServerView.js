@@ -85,8 +85,9 @@ UT.Pages.HomeIndex.ServerView = function (container, dataHandler) {
                 tickFormatter: percentTickFormatter
             },
             xaxis: {
-                minorTickFreq: 4,
-                mode: 'time'
+                minorTickFreq: 1,
+                mode: 'time',
+                tickFormatter: formatAsDate
             },
             grid: {
                 minorVerticalLines: true
@@ -131,6 +132,10 @@ UT.Pages.HomeIndex.ServerView = function (container, dataHandler) {
 
     function percentTickFormatter(number) {
         return number + '%';
+    }
+
+    function formatAsDate(d) {
+        return moment(d).format('MMM Do');
     }
 
     init();
