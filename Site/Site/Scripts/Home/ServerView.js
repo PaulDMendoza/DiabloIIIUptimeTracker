@@ -35,6 +35,7 @@ UT.Pages.HomeIndex.ServerView = function (container, dataHandler) {
         updateArrowIcon(categoryModel.State);
         draw24HourGraph(categoryModel);
         draw30DayGraph(categoryModel);
+        fillStats(categoryModel);
     };
 
     function toggleExpandedDetails() {
@@ -120,6 +121,12 @@ UT.Pages.HomeIndex.ServerView = function (container, dataHandler) {
                 minorVerticalLines: true
             }
         });
+    }
+
+    function fillStats(categoryModel) {
+        $('.values .downtimePercentage', expandedDetailsRow).html(Math.round((categoryModel.DowntimePercentage * 100)) + '%');
+        $('.values .dayOfWeek', expandedDetailsRow).html(categoryModel.DayOfWeek);
+        $('.values .hourOfDay', expandedDetailsRow).html(categoryModel.HourOfDay);
     }
 
     function percentTickFormatter(number) {

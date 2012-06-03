@@ -74,6 +74,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountModels.cs" />
+    <Compile Include="Models\Home\RecentPollsViewModel.cs" />
     <Compile Include="Models\Home\UptimeDataJsonModel.cs" />
     <Compile Include="Models\Home\IndexViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -169,6 +170,7 @@
   <ItemGroup>
     <None Include="App_Data\UptimeDB.s3db" />
     <None Include="Scripts\ThirdParty\flotr2\LICENSE" />
+    <Content Include="Views\Home\RecentPolls.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\UptimeData\UptimeData.csproj">

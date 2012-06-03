@@ -10,8 +10,12 @@ a
    color: #8CC63F;
    text-decoration: underline;
    font-weight: bold;
-   cursor: pointer;
-      
+   cursor: pointer;      
+}
+
+a img 
+{
+    border: none;   
 }
 
 header 
@@ -114,6 +118,48 @@ nav
     height: 250px;
     margin: auto;
 }
+
+#Home-Index .serverType-ExpandedDetails .content .stats
+{
+    width: 90%;
+    margin-bottom: 50px;    
+}
+
+#Home-Index .serverType-ExpandedDetails .content .stats tr.header
+{
+    font-size: 10px;
+    padding: 10px 40px 20px 10px;
+}
+
+#Home-Index .serverType-ExpandedDetails .content .stats td
+{
+    width: 250px;
+}
+
+
+#Home-Index .serverType-ExpandedDetails .content .stats tr.header b
+{
+    font-size: 18px;
+    font-weight: bold;
+}
+
+
+#Home-Index .serverType-ExpandedDetails .content .stats tr.values
+{
+    font-size: 25px;
+    font-weight: bold;
+}
+
+
+footer 
+{
+    margin-top: 5px;
+    margin-bottom: 10px;
+    color: white;
+    font-size: 11px;
+    text-align: center;
+}
+
 
 
 

@@ -21,7 +21,6 @@ namespace UptimeData
             {
                 conn.Open();
                 var comm = conn.CreateCommand();
-                DataTable recipe;
                 String query = "select *";
                 query += "from PollCategory;";
                 comm.CommandText = query;
@@ -57,14 +56,24 @@ namespace UptimeData
 
         public List<PollCategoryValue> GetValuesSince(DateTime startTime)
         {
+            String query = "select * from PollCategoryValue;";
+            return ReadPollCategoryValues(query);
+        }
+
+        public List<PollCategoryValue> GetMostRecentValues(int count)
+        {
+            String query = "select * from PollCategoryValue order by CreatedTime desc, PollCategoryID asc limit " + count + ";";
+            return ReadPollCategoryValues(query);
+        }
+
+        private List<PollCategoryValue> ReadPollCategoryValues(string query)
+        {
             var categories = GetPollCategories().ToDictionary(p => p.PollCategoryID);
             using (var conn = new SQLiteConnection(dbConnectionString))
             {
                 conn.Open();
                 var comm = conn.CreateCommand();
-                DataTable recipe;
-                String query = "select *";
-                query += "from PollCategoryValue;";
+                
                 comm.CommandText = query;
                 using (var reader = comm.ExecuteReader())
                 {
@@ -78,7 +87,7 @@ namespace UptimeData
                     {
                         var value = new PollCategoryValue();
                         value.PollCategoryValueID = reader.GetInt32(idOrdinal);
-                        value.Status = (PollStatusType)Enum.ToObject(typeof(PollStatusType), reader.GetInt32(statusCodeOridinal));
+                        value.Status = (PollStatusType) Enum.ToObject(typeof (PollStatusType), reader.GetInt32(statusCodeOridinal));
                         value.Category = categories[reader.GetInt32(categoryIDOridinal)];
                         value.CreatedTime = reader.GetDateTime(createdTimeOrdinal);
                         values.Add(value);

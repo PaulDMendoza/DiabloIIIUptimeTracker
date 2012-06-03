@@ -33,5 +33,11 @@ namespace Site.Controllers
             return Json(model, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult RecentPolls()
+        {
+            var model = new RecentPollsViewModel(DB);
+            return View(model);
+        }
+
     }
 }

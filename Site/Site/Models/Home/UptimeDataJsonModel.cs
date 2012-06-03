@@ -50,7 +50,13 @@ namespace Site.Models.Home
                         };
                     })
                     .ToList();
+                categoryViewModel.DowntimePercentage = (decimal)readingGroup.Count(p => p.Status == PollStatusType.Down) / readingGroup.Count();
 
+                var downtimeDayOfWeekGroupOfReads = readingGroup.Where(p=>p.Status == PollStatusType.Down).GroupBy(r => r.CreatedTime.DayOfWeek).OrderByDescending(g => g.Count()).FirstOrDefault();
+                categoryViewModel.DayOfWeek = downtimeDayOfWeekGroupOfReads != null ? downtimeDayOfWeekGroupOfReads.Key.ToString() : "Tuesday";
+                
+                var downtimeHour = readingGroup.Where(p => p.Status == PollStatusType.Down).GroupBy(r => r.CreatedTime.Hour).OrderByDescending(g => g.Count()).FirstOrDefault();
+                categoryViewModel.HourOfDay = downtimeHour != null ? (int?)downtimeHour.Key : 4;
 
                 categoryViewModel.HasReads = true;
             }
@@ -114,6 +120,12 @@ namespace Site.Models.Home
 
 
             public List<UptimeInTimespan> Uptime30Days { get; set; }
+
+            public decimal DowntimePercentage { get; set; }
+
+            public string DayOfWeek { get; set; }
+
+            public int? HourOfDay { get; set; }
         }
 
         public class UptimeInTimespan

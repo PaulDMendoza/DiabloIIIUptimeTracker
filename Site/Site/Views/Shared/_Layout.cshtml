@@ -8,12 +8,47 @@
     <script src="@Url.Content("~/Scripts/modernizr-1.7.min.js")" type="text/javascript"></script>
     <script src="/Scripts/ThirdParty/JSLINQ.js" type="text/javascript"></script>
     <script src="/Scripts/ThirdParty/moment.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-32342291-1']);
+        _gaq.push(['_trackPageview']);
+
+        (function () {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+
+    </script>
 </head>
 <body>
     <div class="page">
         <header>
             <div id="title">
-                <img src="/Content/images/DiabloIIISiteLogo.png"/>
+                <table>
+                    <tr>
+                        <td>
+                            <a href="/">
+                                      <img src="/Content/images/DiabloIIISiteLogo.png" alt="Diablo III Downtime Logo"/></a>
+                        </td>
+                        <td>
+                            <!-- Lockerz Share BEGIN -->
+                            <div class="a2a_kit a2a_default_style">
+                                <a class="a2a_dd" href="http://www.addtoany.com/share_save">Share</a>
+                                <span class="a2a_divider"></span>
+                                <a class="a2a_button_facebook"></a>
+                                <a class="a2a_button_twitter"></a>
+                                <a class="a2a_button_email"></a>
+                                <a class="a2a_button_linkedin"></a>
+                                <a class="a2a_button_reddit"></a>
+                                <a class="a2a_button_google_plus"></a>
+                            </div>
+                            <script type="text/javascript" src="http://static.addtoany.com/menu/page.js"></script>
+                            <!-- Lockerz Share END -->
+                        </td>
+                    </tr>
+                </table>
             </div>
             <nav>
                 <ul id="menu">
@@ -23,10 +58,29 @@
             </nav>
         </header>
         <section id="main">
+            
             @RenderBody()
+            <br/>
+            <br/>
+            <div class="a2a_kit a2a_default_style">
+                <a class="a2a_dd" href="http://www.addtoany.com/share_save">Share</a>
+                <span class="a2a_divider"></span>
+                <a class="a2a_button_facebook"></a>
+                <a class="a2a_button_twitter"></a>
+                <a class="a2a_button_email"></a>
+                <a class="a2a_button_linkedin"></a>
+                <a class="a2a_button_reddit"></a>
+                <a class="a2a_button_google_plus"></a>
+                 
+            </div>
+            <script type="text/javascript" src="http://static.addtoany.com/menu/page.js"></script>
         </section>
-        
         <footer>
+            
+            <a href="/">Home</a> | <a href="/Home/RecentPolls">Recent Polling</a> | <a href="/Home/About">About/FAQ</a>
+            <br/>
+            <br/>
+            support@diablo3downtime.com
         </footer>
     </div>
 </body>

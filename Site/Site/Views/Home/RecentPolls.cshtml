@@ -1,0 +1,28 @@
+﻿@model Site.Models.Home.RecentPollsViewModel
+@{
+    ViewBag.Title = "RecentPolls";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Recent Poll Requests</h2>
+<p>Recent requests made to the status server and the results. </p>
+<table style="width: 100%; text-align: center;">
+    <tr>
+        <th>Region</th>
+        <th>Server</th>
+        <th>Status</th>
+        <th>Time</th>
+    </tr>
+    @foreach (var p in Model.PollValues)
+    {
+        <tr>
+            <td class="region">@p.Category.Region</td>
+            <td class="server">@p.Category.ServerCategory</td>
+            <td class="status">@p.Status.ToString()</td>
+            <td class="time">@p.CreatedTime.ToLongDateString() @p.CreatedTime.ToLongTimeString() GMT</td>
+        </tr>
+    }
+
+</table>
+
+
