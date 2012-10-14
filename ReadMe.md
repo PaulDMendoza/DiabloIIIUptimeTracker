@@ -1,9 +1,6 @@
-This is a site that monitors the status of Diablo 3 servers and how often they are up 
-or down. This site is running at http://www.diablo3downtime.com. 
+This is a site that monitors the status of Diablo 3 servers and how often they are up or down. This site is running at http://www.diablo3downtime.com. 
 
-This is built using ASP.NET MVC 3 and a Windows service for the polling of the site. 
-The visualization is all done using Flotr2 JavaScript libary. This only supports browsers
-like IE9, Firefox and Chrome.
+Built using ASP.NET MVC 3 and a Windows service for the polling of the site. The visualization is all done using Flotr2 JavaScript libary. This only supports browsers like IE9, Firefox and Chrome.
 
 #Getting Started
 What you need to program this:
@@ -13,12 +10,10 @@ What you need to program this:
 - ASP.NET MVC 3
 
 ##Running the code
-There are two compontents of running the code. There is running the web service and running the website. The web service
-will generate the data and the site will consume the data. 
+There are two compontents of running the code. There is running the Windows service and running the website. The Windows service will generate the data and the site will consume the data. 
 
 ###Running the web service
-Ensure the Web.Config connection string points to the correct SQL Server instance. By default I've configured
-the code to point at SQLExpress local. 
+Ensure the Web.Config connection string points to the correct SQL Server instance. By default I've configured the code to point at SQLExpress local. 
 
 Next, build the service and install it. It's a basic Windows Service so you can lookup online if you don't know how to do this.
 
@@ -29,7 +24,7 @@ You shouldn't make the database. The Entity Framework model of the database will
 ###Running the site
 Ensure the web.config is configured correctly.
 
-Start the website. Most likely you're missing data. You can use the below scripts to generate data into your database.
+Start the website. Most likely you're missing data so the site will be an empty page. You can use the below scripts to generate data into your database to play with instead of running the Windows Service for a month.
 
 #Generating Test Data
 
