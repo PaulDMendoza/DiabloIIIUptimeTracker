@@ -61,6 +61,15 @@ WHERE type = 'P' AND number BETWEEN 0 AND 200) numbers
 left join PollCategory pc on 1 = 1
 ```
 
+#Profiling Performance
+The code uses the Stack Exchange MVC Mini Profiler to help identify performance issues by showing a little icon at the top left. Click the icon to see a breakdown of performance.
+
+To show the icon, add <b>"?profile=true"</b> to the end of the URL
+
+http://localhost:55071/Home/Index?profile=true
+
+The caching can cause weird stuff to happen though so be aware that you will see a bunch of requests if the site has been running and cached results were being returned.
+
 #License
 Copyright (C) 2012 Paul Mendoza
 

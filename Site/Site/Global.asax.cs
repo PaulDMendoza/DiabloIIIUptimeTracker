@@ -4,6 +4,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
+using StackExchange.Profiling;
+
 
 namespace Site
 {
@@ -35,6 +37,25 @@ namespace Site
 
             RegisterGlobalFilters(GlobalFilters.Filters);
             RegisterRoutes(RouteTable.Routes);
+            MiniProfilerEF.Initialize();
+        }
+
+        protected void Application_BeginRequest()
+        {
+            MiniProfiler.Start();
+        }
+
+        protected void Application_EndRequest()
+        {
+            MiniProfiler.Stop();
+        }
+
+        protected void Application_AuthenticateRequest(Object sender, EventArgs e)
+        {
+            if (string.Compare(this.Request.Params["profile"], "true", true) != 0)
+            {
+                MiniProfiler.Stop(discardResults: true);
+            }
         }
     }
 }

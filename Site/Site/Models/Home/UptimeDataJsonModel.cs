@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using UptimeData;
 
+
 namespace Site.Models.Home
 {
     public class UptimeDataJsonModel

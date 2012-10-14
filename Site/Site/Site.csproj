@@ -52,6 +52,12 @@
       <HintPath>..\packages\EntityFramework.5.0.0\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="MiniProfiler">
+      <HintPath>..\packages\MiniProfiler.2.0.2\lib\net40\MiniProfiler.dll</HintPath>
+    </Reference>
+    <Reference Include="MiniProfiler.EntityFramework">
+      <HintPath>..\packages\MiniProfiler.EF.2.0.3\lib\net40\MiniProfiler.EntityFramework.dll</HintPath>
+    </Reference>
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data.Entity" />
     <Reference Include="System.Web.Extensions" />
@@ -176,6 +182,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App_Data\UptimeDB.s3db" />
+    <None Include="Properties\PublishProfiles\Production.pubxml" />
     <None Include="Scripts\ThirdParty\flotr2\LICENSE" />
     <Content Include="Views\Home\RecentPolls.cshtml" />
   </ItemGroup>

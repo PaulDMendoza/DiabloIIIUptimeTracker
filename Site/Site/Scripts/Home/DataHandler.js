@@ -10,8 +10,7 @@ UT.Pages.HomeIndex.DataHandler = function () {
     if (false)
         jsonModel = { CategoryViewModels: [] };
     var self = this;
-    var DATA_UPDATE_URL = '/Home/UptimeData';
-
+    
     var dataUpdatedHandlers = [];
 
     function init() {
@@ -31,7 +30,7 @@ UT.Pages.HomeIndex.DataHandler = function () {
 
     this.refreshData = function () {
         $.ajax({
-            url: DATA_UPDATE_URL,
+            url: '/Home/UptimeData',
             dataType: 'JSON',
             success: function (data) {
                 jsonModel = data;

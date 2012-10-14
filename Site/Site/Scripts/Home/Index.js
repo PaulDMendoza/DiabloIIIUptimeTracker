@@ -27,8 +27,8 @@ UT.Pages.HomeIndex.Controller = function () {
     });
 
     setInterval(function () {
-        dataHandler.refreshData();
-    }, 1000 * 20);
+        window.location = window.location; //dataHandler.refreshData();
+    }, 1000 * 60);
 
 
 };
