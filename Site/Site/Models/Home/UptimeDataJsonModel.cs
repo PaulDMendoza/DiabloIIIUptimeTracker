@@ -14,63 +14,94 @@ namespace Site.Models.Home
         {
             CategoryViewModels = db.GetPollCategories().Select(pc => new CategoryViewModel(pc)).ToList();
 
-            var allReads = db.GetValuesSince(DateTime.Now.AddMonths(-6));
-            var readingsByCategory = allReads.GroupBy(a => a.CategoryID);
-            foreach (var readingGroup in readingsByCategory)
+            var allReads = db.GetValuesSince(DateTime.Now.AddMonths(-1));
+            var pollsByCategory = allReads.GroupBy(a => a.CategoryID);
+            foreach (var polls in pollsByCategory)
             {
-                var categoryViewModel = CategoryViewModels.First(p => p.PollCategoryID == readingGroup.Key);
-
-                categoryViewModel.MostRecentRead = readingGroup.OrderByDescending(p => p.CreatedTime).Select(p=>new PollCategoryValueJSON(p)).First();
-
-                SetStatusMessage(readingGroup, categoryViewModel);
-
-                var reads = readingGroup.ToList();
-                categoryViewModel.UptimeLast24Hours = reads
-                    .Where(r => r.CreatedTime >= DateTimeOffset.Now.AddDays(-1))
-                    .GroupBy(p => p.CreatedTime.ToString("MM/dd/yyyy HH"))
-                    .Select(pollValuesInHour =>
-                    {
-                        var singleTime = pollValuesInHour.First().CreatedTime;
-                        return new UptimeInTimespan()
-                        {
-                            P = (decimal)pollValuesInHour.Count(v => v.Status == PollStatusType.Up) / pollValuesInHour.Count(),
-                            T = singleTime.Date.AddHours(singleTime.Hour)
-                        };
-                    })
-                    .ToList();
-
-                DateTimeOffset date30DaysAgo = DateTimeOffset.Now.AddDays(-31);
-                categoryViewModel.Uptime30Days = reads
-                    .Where(r => r.CreatedTime >= date30DaysAgo)
-                    .GroupBy(p => p.CreatedTime.ToString("MM/dd/yyyy"))
-                    .Select(pollValuesInDay =>
-                    {
-                        var singleTime = pollValuesInDay.First().CreatedTime;
-                        return new UptimeInTimespan()
-                        {
-                            P = (decimal)pollValuesInDay.Count(v => v.Status == PollStatusType.Up) / pollValuesInDay.Count(),
-                            T = singleTime.Date
-                        };
-                    })
-                    .ToList();
-                categoryViewModel.DowntimePercentage = (decimal)readingGroup.Count(p => p.Status == PollStatusType.Down) / readingGroup.Count();
-
-                var downtimeDayOfWeekGroupOfReads = readingGroup.Where(p=>p.Status == PollStatusType.Down).GroupBy(r => r.CreatedTime.DayOfWeek).OrderByDescending(g => g.Count()).FirstOrDefault();
-                categoryViewModel.DayOfWeek = downtimeDayOfWeekGroupOfReads != null ? downtimeDayOfWeekGroupOfReads.Key.ToString() : "Tuesday";
-                
-                var downtimeHour = readingGroup.Where(p => p.Status == PollStatusType.Down).GroupBy(r => r.CreatedTime.Hour).OrderByDescending(g => g.Count()).FirstOrDefault();
-                categoryViewModel.HourOfDay = downtimeHour != null ? (int?)downtimeHour.Key : 4;
-
-                categoryViewModel.HasReads = true;
+                FillCategoryViewModel(polls);
             }
 
             CategoryViewModels = CategoryViewModels.Where(p => p.HasReads).ToList();
         }
 
-        private void SetStatusMessage(IGrouping<Guid, PollCategoryValue> readingGroup, CategoryViewModel matchingCategoryViewModel)
+        private void FillCategoryViewModel(IGrouping<Guid, PollCategoryValue> readingGroup)
+        {
+            var categoryViewModel = CategoryViewModels.First(p => p.PollCategoryID == readingGroup.Key);
+            categoryViewModel.MostRecentRead = GetMostRecentRead(readingGroup);
+            categoryViewModel.StatusMessage = GetStatusMessage(readingGroup, categoryViewModel);            
+            categoryViewModel.UptimeLast24Hours = GetUptimeForLast24Hours(readingGroup);
+            categoryViewModel.Uptime30Days = GetUptimeLast30Days(readingGroup);
+            categoryViewModel.DowntimePercentage = GetDowntimePercentage(readingGroup);
+            categoryViewModel.DayOfWeek = GetDayOfWeekDownMost(readingGroup);
+            categoryViewModel.HourOfDay = GetHourOfDayDownTheMost(readingGroup);
+
+            categoryViewModel.HasReads = true;
+        }
+
+        private static PollCategoryValueJSON GetMostRecentRead(IGrouping<Guid, PollCategoryValue> readingGroup)
+        {
+            return readingGroup.OrderByDescending(p => p.CreatedTime).Select(p => new PollCategoryValueJSON(p)).First();
+        }
+
+        private static int? GetHourOfDayDownTheMost(IGrouping<Guid, PollCategoryValue> readingGroup)
+        {
+            var downtimeHour = readingGroup.Where(p => p.Status == PollStatusType.Down).GroupBy(r => r.CreatedTime.Hour).OrderByDescending(g => g.Count()).FirstOrDefault();
+            var x = downtimeHour != null ? (int?)downtimeHour.Key : 4;
+            return x;
+        }
+
+        private static string GetDayOfWeekDownMost(IGrouping<Guid, PollCategoryValue> readingGroup)
+        {
+            var downtimeDayOfWeekGroupOfReads = readingGroup.Where(p => p.Status == PollStatusType.Down).GroupBy(r => r.CreatedTime.DayOfWeek).OrderByDescending(g => g.Count()).FirstOrDefault();
+            var x = downtimeDayOfWeekGroupOfReads != null ? downtimeDayOfWeekGroupOfReads.Key.ToString() : "Tuesday";
+            return x;
+        }
+
+        private static decimal GetDowntimePercentage(IGrouping<Guid, PollCategoryValue> readingGroup)
+        {
+            return (decimal)readingGroup.Count(p => p.Status == PollStatusType.Down) / readingGroup.Count();
+        }
+
+        private static List<UptimeInTimespan> GetUptimeLast30Days(IGrouping<Guid, PollCategoryValue> reads)
+        {
+            DateTimeOffset date30DaysAgo = DateTimeOffset.Now.AddDays(-31);
+            var uptimeStats = reads
+                .Where(r => r.CreatedTime >= date30DaysAgo)
+                .GroupBy(p => p.CreatedTime.ToString("MM/dd/yyyy"))
+                .Select(pollValuesInDay =>
+                {
+                    var singleTime = pollValuesInDay.First().CreatedTime;
+                    return new UptimeInTimespan()
+                    {
+                        P = (decimal)pollValuesInDay.Count(v => v.Status == PollStatusType.Up) / pollValuesInDay.Count(),
+                        T = singleTime.Date
+                    };
+                })
+                .ToList();
+            return uptimeStats;
+        }
+
+        private static List<UptimeInTimespan> GetUptimeForLast24Hours(IGrouping<Guid, PollCategoryValue> reads)
+        {
+            return reads
+                            .Where(r => r.CreatedTime >= DateTimeOffset.Now.AddDays(-1))
+                            .GroupBy(p => p.CreatedTime.ToString("MM/dd/yyyy HH"))
+                            .Select(pollValuesInHour =>
+                            {
+                                var singleTime = pollValuesInHour.First().CreatedTime;
+                                return new UptimeInTimespan()
+                                {
+                                    P = (decimal)pollValuesInHour.Count(v => v.Status == PollStatusType.Up) / pollValuesInHour.Count(),
+                                    T = singleTime.Date.AddHours(singleTime.Hour)
+                                };
+                            })
+                            .ToList();
+        }
+
+        private string GetStatusMessage(IGrouping<Guid, PollCategoryValue> readingGroup, CategoryViewModel matchingCategoryViewModel)
         {
 
-            matchingCategoryViewModel.StatusMessage = "";
+            var statusMessage = "";
             var lastChange = readingGroup.Where(p => (p.Status == PollStatusType.Down && matchingCategoryViewModel.MostRecentRead.Status != PollStatusType.Down) ||
                 (p.Status == PollStatusType.Up && matchingCategoryViewModel.MostRecentRead.Status != PollStatusType.Up))
                 .OrderByDescending(p => p.CreatedTime)
@@ -78,8 +109,9 @@ namespace Site.Models.Home
             if (lastChange != null)
             {
                 TimeSpan timeSinceLastStatusChange = lastChange.CreatedTime.Subtract(DateTime.Now);
-                matchingCategoryViewModel.StatusMessage = ConvertTimeSpanToFriendlyText(timeSinceLastStatusChange);
+                statusMessage = ConvertTimeSpanToFriendlyText(timeSinceLastStatusChange);
             }
+            return statusMessage;
         }
 
         public string ConvertTimeSpanToFriendlyText(TimeSpan t)
