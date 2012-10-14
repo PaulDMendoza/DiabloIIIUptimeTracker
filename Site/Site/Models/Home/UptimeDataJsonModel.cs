@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using UptimeData;
+using Site.Models.Home.UptimDataJsonModel;
 
 
 namespace Site.Models.Home
@@ -125,60 +126,6 @@ namespace Site.Models.Home
                 return Math.Abs(t.TotalHours).ToString("0") + " hours";
             }
             return Math.Abs(t.TotalDays).ToString("0") + " days";
-        }
-
-        public class CategoryViewModel
-        {
-            public CategoryViewModel(PollCategory pc)
-            {
-                ServerCategory = pc.ServerCategory;
-                Region = pc.Region;
-                PollCategoryID = pc.PollCategoryID;
-            }
-
-            public string ServerCategory { get; set; }
-            public string Region { get; set; }
-            public Guid PollCategoryID { get; set; }
-            public string StatusMessage { get; set; }
-            public PollCategoryValueJSON MostRecentRead { get; set; }
-            public bool HasReads { get; set; }
-            public string State
-            {
-                get
-                {
-                    return MostRecentRead.Status.ToString();
-                }
-            }
-
-            public List<UptimeInTimespan> UptimeLast24Hours { get; set; }
-            
-            public List<UptimeInTimespan> Uptime30Days { get; set; }
-
-            public decimal DowntimePercentage { get; set; }
-
-            public string DayOfWeek { get; set; }
-
-            public int? HourOfDay { get; set; }
-        }
-
-        public class UptimeInTimespan
-        {
-            public decimal P { get; set; }
-            public DateTime T { get; set; }
-        }
-
-        public class PollCategoryValueJSON
-        {
-            private PollCategoryValue _value;
-            public PollCategoryValueJSON(PollCategoryValue value)
-            {
-                _value = value;
-            }
-
-            public DateTimeOffset CreatedTime { get { return _value.CreatedTime; } }
-            public Guid CategoryID { get { return _value.CategoryID; } }
-            public PollStatusType Status { get { return _value.Status; } }
-            
-        }
+        }      
     }
 }

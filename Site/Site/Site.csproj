@@ -88,6 +88,9 @@
     </Compile>
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\Home\RecentPollsViewModel.cs" />
+    <Compile Include="Models\Home\UptimDataJsonModel\CategoryViewModel.cs" />
+    <Compile Include="Models\Home\UptimDataJsonModel\PollCategoryValueJSON.cs" />
+    <Compile Include="Models\Home\UptimDataJsonModel\UptimeInTimespan.cs" />
     <Compile Include="Models\Home\UptimeDataJsonModel.cs" />
     <Compile Include="Models\Home\IndexViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
