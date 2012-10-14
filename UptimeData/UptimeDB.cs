@@ -1,100 +1,80 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SQLite;
 using System.IO;
 using System.Linq;
+using System.Data.Entity;
+using System.Configuration;
+
 
 namespace UptimeData
-{
-    public class UptimeDB
+{   
+
+
+    public class UptimeDB : DbContext
     {
-        string dbConnectionString;
-        public UptimeDB(string dbContainingFolder)
+        public UptimeDB()
+            : base("UptimeDB")
         {
-            dbConnectionString = "Data Source=" + Path.Combine(dbContainingFolder, "UptimeDB.s3db");
         }
 
+
+        public void Recreate()
+        {
+            if (base.Database.Exists())
+            {
+                base.Database.Delete();
+            }
+
+            base.Database.Create();
+
+            AddCategory("Americas", "Game Server");
+            AddCategory("Americas", "Gold");
+            AddCategory("Americas", "Hardcore");
+            AddCategory("Americas", "USD");  
+
+            AddCategory("Europe", "Game Server");
+            AddCategory("Europe", "Gold");
+            AddCategory("Europe", "Hardcore");
+            AddCategory("Europe", "EUR");
+            
+            AddCategory("Asia", "Game Server");
+            AddCategory("Asia", "Gold");
+            AddCategory("Asia", "Hardcore");
+            this.SaveChanges();
+        }
+
+        private void AddCategory(string region, string serverType) {
+            this.PollCategories.Add(new PollCategory()
+            {
+                PollCategoryID = Guid.NewGuid(),
+                Region = region,
+                ServerCategory = serverType
+            });
+        }
+                
+
+        public IDbSet<PollCategory> PollCategories { get; set; }
+        public IDbSet<PollCategoryValue> PollCategoryValue { get; set; }
+        
         public IEnumerable<PollCategory> GetPollCategories()
         {
-            using (var conn = new SQLiteConnection(dbConnectionString))
-            {
-                conn.Open();
-                var comm = conn.CreateCommand();
-                String query = "select *";
-                query += "from PollCategory;";
-                comm.CommandText = query;
-                using (var reader = comm.ExecuteReader())
-                {
-                    var categories = new List<PollCategory>();
-                    while (reader.Read())
-                    {
-                        var c = new PollCategory();
-                        c.Region = reader["Region"].ToString();
-                        c.ServerCategory = reader["ServerCategory"].ToString();
-                        c.PollCategoryID = reader.GetInt32(reader.GetOrdinal("PollCategoryID"));
-                        categories.Add(c);
-                    }
-                    return categories;
-                }
-            }
+            return this.PollCategories.ToList();
         }
-
 
         public void InsertPollCategoryValue(PollCategoryValue pollCategoryValue)
         {
-            using (var conn = new SQLiteConnection(dbConnectionString))
-            {
-                conn.Open();
-                var comm = conn.CreateCommand();
-                comm.CommandText = "insert into PollCategoryValue (StatusCode, PollCategoryID) VALUES (@StatusCode, @PollCategoryID);";
-                comm.Parameters.AddWithValue("@StatusCode", (int)pollCategoryValue.Status);
-                comm.Parameters.AddWithValue("@PollCategoryID", pollCategoryValue.Category.PollCategoryID);
-                comm.ExecuteNonQuery();
-            }
+            this.PollCategoryValue.Add(pollCategoryValue);
         }
 
         public List<PollCategoryValue> GetValuesSince(DateTime startTime)
         {
-            String query = "select * from PollCategoryValue;";
-            return ReadPollCategoryValues(query);
+            return this.PollCategoryValue.Where(v => v.CreatedTime >= startTime).ToList();
         }
 
         public List<PollCategoryValue> GetMostRecentValues(int count)
         {
-            String query = "select * from PollCategoryValue order by CreatedTime desc, PollCategoryID asc limit " + count + ";";
-            return ReadPollCategoryValues(query);
-        }
-
-        private List<PollCategoryValue> ReadPollCategoryValues(string query)
-        {
-            var categories = GetPollCategories().ToDictionary(p => p.PollCategoryID);
-            using (var conn = new SQLiteConnection(dbConnectionString))
-            {
-                conn.Open();
-                var comm = conn.CreateCommand();
-                
-                comm.CommandText = query;
-                using (var reader = comm.ExecuteReader())
-                {
-                    int idOrdinal = reader.GetOrdinal("PollCategoryValueID");
-                    int statusCodeOridinal = reader.GetOrdinal("StatusCode");
-                    int categoryIDOridinal = reader.GetOrdinal("PollCategoryID");
-                    int createdTimeOrdinal = reader.GetOrdinal("CreatedTime");
-
-                    var values = new List<PollCategoryValue>();
-                    while (reader.Read())
-                    {
-                        var value = new PollCategoryValue();
-                        value.PollCategoryValueID = reader.GetInt32(idOrdinal);
-                        value.Status = (PollStatusType) Enum.ToObject(typeof (PollStatusType), reader.GetInt32(statusCodeOridinal));
-                        value.Category = categories[reader.GetInt32(categoryIDOridinal)];
-                        value.CreatedTime = reader.GetDateTime(createdTimeOrdinal);
-                        values.Add(value);
-                    }
-                    return values;
-                }
-            }
-        }
+            return this.PollCategoryValue.OrderByDescending(p => p.CreatedTime).Take(count).ToList();
+        }        
     }
 }

@@ -30,6 +30,7 @@ namespace PollingService
             {
                 ParseRegionElement(region);
             }
+            DB.SaveChanges();
         }
 
         private HtmlNodeCollection GetRegionElements(HtmlDocument html)
@@ -57,9 +58,9 @@ namespace PollingService
                 if (possibleCategoryMatch == null)
                     continue;
 
-                pollCategoryValue.Category = possibleCategoryMatch;
+                pollCategoryValue.CategoryID = possibleCategoryMatch.PollCategoryID;
                 pollCategoryValue.Status = PollStatusType.Unknown;
-
+                pollCategoryValue.CreatedTime = DateTime.Now;
                 foreach (var div in server.SelectNodes("div"))
                 {
                     if (div.OuterHtml.Contains("status-icon"))

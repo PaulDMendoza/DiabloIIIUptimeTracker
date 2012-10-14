@@ -12,7 +12,7 @@ namespace Site.Controllers
     {
         private UptimeDB DB
         {
-            get { return new UptimeDB(Server.MapPath("~/App_Data")); }
+            get { return new UptimeDB(); }
         }
 
         public ActionResult Index()

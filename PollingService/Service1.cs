@@ -31,7 +31,7 @@ namespace PollingService
             {
                 try
                 {
-                    Thread.Sleep(20000);
+                    Thread.Sleep(20 * 1000);
                     PollingController pollingController = new PollingController();
                     DateTime nextPollTime = DateTime.Now;
                     while (!isCancelled)
@@ -39,7 +39,7 @@ namespace PollingService
                         if (nextPollTime <= DateTime.Now)
                         {
                             pollingController.PollAllPollersOnce();
-                            nextPollTime = DateTime.Now.AddMinutes(1);
+                            nextPollTime = DateTime.Now.AddMinutes(5);
                         }
 
                         Thread.Sleep(100);

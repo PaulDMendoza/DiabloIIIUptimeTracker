@@ -14,12 +14,12 @@ namespace Site.Models.Home
             CategoryViewModels = db.GetPollCategories().Select(pc => new CategoryViewModel(pc)).ToList();
 
             var allReads = db.GetValuesSince(DateTime.Now.AddMonths(-6));
-            var readingsByCategory = allReads.GroupBy(a => a.Category);
+            var readingsByCategory = allReads.GroupBy(a => a.CategoryID);
             foreach (var readingGroup in readingsByCategory)
             {
-                var categoryViewModel = CategoryViewModels.First(p => p.PollCategoryID == readingGroup.Key.PollCategoryID);
+                var categoryViewModel = CategoryViewModels.First(p => p.PollCategoryID == readingGroup.Key);
 
-                categoryViewModel.MostRecentRead = readingGroup.OrderByDescending(p => p.CreatedTime).First();
+                categoryViewModel.MostRecentRead = readingGroup.OrderByDescending(p => p.CreatedTime).Select(p=>new PollCategoryValueJSON(p)).First();
 
                 SetStatusMessage(readingGroup, categoryViewModel);
 
@@ -66,7 +66,7 @@ namespace Site.Models.Home
             CategoryViewModels = CategoryViewModels.Where(p => p.HasReads).ToList();
         }
 
-        private void SetStatusMessage(IGrouping<PollCategory, PollCategoryValue> readingGroup, CategoryViewModel matchingCategoryViewModel)
+        private void SetStatusMessage(IGrouping<Guid, PollCategoryValue> readingGroup, CategoryViewModel matchingCategoryViewModel)
         {
 
             matchingCategoryViewModel.StatusMessage = "";
@@ -105,9 +105,9 @@ namespace Site.Models.Home
 
             public string ServerCategory { get; set; }
             public string Region { get; set; }
-            public int PollCategoryID { get; set; }
+            public Guid PollCategoryID { get; set; }
             public string StatusMessage { get; set; }
-            public PollCategoryValue MostRecentRead { get; set; }
+            public PollCategoryValueJSON MostRecentRead { get; set; }
             public bool HasReads { get; set; }
             public string State
             {
@@ -118,9 +118,7 @@ namespace Site.Models.Home
             }
 
             public List<UptimeInTimespan> UptimeLast24Hours { get; set; }
-
-
-
+            
             public List<UptimeInTimespan> Uptime30Days { get; set; }
 
             public decimal DowntimePercentage { get; set; }
@@ -134,6 +132,20 @@ namespace Site.Models.Home
         {
             public decimal P { get; set; }
             public DateTime T { get; set; }
+        }
+
+        public class PollCategoryValueJSON
+        {
+            private PollCategoryValue _value;
+            public PollCategoryValueJSON(PollCategoryValue value)
+            {
+                _value = value;
+            }
+
+            public DateTimeOffset CreatedTime { get { return _value.CreatedTime; } }
+            public Guid CategoryID { get { return _value.CategoryID; } }
+            public PollStatusType Status { get { return _value.Status; } }
+            
         }
     }
 }
