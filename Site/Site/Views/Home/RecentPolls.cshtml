@@ -16,10 +16,10 @@
     @foreach (var p in Model.PollValues)
     {
         <tr>
-            <td class="region">@p.Category.Region</td>
-            <td class="server">@p.Category.ServerCategory</td>
+            <td class="region">@p.Region</td>
+            <td class="server">@p.Server</td>
             <td class="status">@p.Status.ToString()</td>
-            <td class="time">@p.CreatedTime.ToLongDateString() @p.CreatedTime.ToLongTimeString() GMT</td>
+            <td class="time">@p.Time.DateTime.ToLongDateString() @p.Time.DateTime.ToLongTimeString() GMT</td>
         </tr>
     }
 
