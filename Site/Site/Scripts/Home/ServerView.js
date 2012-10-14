@@ -25,8 +25,8 @@ UT.Pages.HomeIndex.ServerView = function (container, dataHandler) {
         $('.expand-details a', container).click(toggleExpandedDetails);
         expandedDetailsRow = container.next(".serverType-ExpandedDetails");
         expandedDetailsCell = $('td', expandedDetailsRow);
-        regionName = container.data('region');
-        serverCategory = container.data('serverCategory');
+        regionName = container.attr('data-region');
+        serverCategory = container.attr('data-serverCategory');
         self.update();
     }
 
