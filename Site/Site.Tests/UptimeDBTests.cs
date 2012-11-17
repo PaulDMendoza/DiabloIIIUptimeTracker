@@ -16,8 +16,8 @@ namespace Site.Tests
         public static void Init(TestContext context)
         {
             var db = new UptimeDB();
-            //db.Database.ExecuteSqlCommand("delete from PollCategoryValue");
-            //db.Database.ExecuteSqlCommand("delete from PollCategory");
+            db.Database.ExecuteSqlCommand("delete from PollCategoryValue");
+            db.Database.ExecuteSqlCommand("delete from PollCategory");
         }
 
         [TestMethod]        
