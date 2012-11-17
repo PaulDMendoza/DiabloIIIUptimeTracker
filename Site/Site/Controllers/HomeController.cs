@@ -37,6 +37,7 @@ namespace Site.Controllers
         public JsonResult UptimeData()
         {
             var model = new UptimeDataJsonModel(DB);
+            model.Fill();
             return Json(model, JsonRequestBehavior.AllowGet);
         }
 

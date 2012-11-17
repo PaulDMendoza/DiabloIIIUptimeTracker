@@ -13,6 +13,7 @@ namespace Site.Models.Home
         public IndexViewModel(UptimeDB db)
         {
             JsonModel = new UptimeDataJsonModel(db);
+            JsonModel.Fill();
             
         }
     }

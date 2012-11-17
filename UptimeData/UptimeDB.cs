@@ -67,9 +67,9 @@ namespace UptimeData
             this.PollCategoryValue.Add(pollCategoryValue);
         }
 
-        public List<PollCategoryValue> GetValuesSince(DateTime startTime)
+        public IEnumerable<PollCategoryValue> GetValuesSince(DateTime startTime)
         {
-            return this.PollCategoryValue.Where(v => v.CreatedTime >= startTime).ToList();
+            return this.PollCategoryValue.Where(v => v.CreatedTime >= startTime);
         }
 
         public List<PollCategoryValue> GetMostRecentValues(int count)
