@@ -96,9 +96,11 @@ namespace Site.Models.Home
 
             string sqlFormat = @"
                     select  CAST(CreatedTime as DATE) as T,	  
-	                     (select COUNT(0) from PollCategoryValue downValues 
+	                     (select COUNT(0) from PollCategoryValue upValues 
 			                    where CategoryID = '{0}' 
-				                    AND CAST(v.CreatedTime as DATE) = CAST( downValues.CreatedTime as DATE) 
+				                    AND DAY( CAST(v.CreatedTime as DATE)) = DAY( CAST(upValues.CreatedTime as DATE) ) 
+                                    AND MONTH( CAST(v.CreatedTime as DATE)) = MONTH( CAST(upValues.CreatedTime as DATE) ) 
+                                    AND YEAR( CAST(v.CreatedTime as DATE)) = YEAR( CAST(upValues.CreatedTime as DATE) ) 
 				                    AND Status = 1)
 		                    / CAST( COUNT(0) as decimal(18, 5)) as P
                     from PollCategoryValue v
