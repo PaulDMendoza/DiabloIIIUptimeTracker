@@ -47,7 +47,7 @@ namespace PollingService
 
         private void ParseRegionElement(HtmlNode region)
         {
-            var regionTitle = region.SelectSingleNode("h3").InnerText;
+            var regionTitle = region.SelectSingleNode("h2").InnerText;
 
             foreach (var server in region.SelectNodes(".//div[@class=\"server\" or @class=\"server alt\"]"))
             {

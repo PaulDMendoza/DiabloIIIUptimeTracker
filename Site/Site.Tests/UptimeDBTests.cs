@@ -9,7 +9,6 @@ using System.Data.Entity;
 namespace Site.Tests
 {
     [TestClass]
-    [Ignore]
     public class UptimeDBTests
     {
         [ClassInitialize]
